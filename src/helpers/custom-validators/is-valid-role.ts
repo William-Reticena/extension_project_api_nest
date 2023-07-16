@@ -4,7 +4,7 @@ import {
   ValidatorConstraint,
   registerDecorator,
 } from 'class-validator';
-import { CreateUserDto } from '../../dto/create-user.dto';
+import { CreateUserDto } from '@/dtos/create-user.dto';
 
 @ValidatorConstraint({ name: 'isValidRole', async: false })
 export class IsValidRoleConstraint {

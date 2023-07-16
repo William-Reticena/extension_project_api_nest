@@ -3,10 +3,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSource } from '@/configs/db.config';
 import { UserModule } from '@/modules/user.module';
+import { AuthModule } from '@/modules/auth.module';
 import { CustomExceptionFilter } from '@/helpers/exception-filter/custom-exception-filter';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(dataSource), UserModule],
+  imports: [TypeOrmModule.forRoot(dataSource), AuthModule, UserModule],
   providers: [
     {
       provide: APP_FILTER,

@@ -7,13 +7,16 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { UserService } from '@/services/user.service';
-import { CreateUserDto } from '@/dto/create-user.dto';
-import { ResponseDto } from '@/dto/response.dto';
-import { UpdateUserDto } from '@/dto/update-user.dto';
+import { CreateUserDto } from '@/dtos/create-user.dto';
+import { ResponseDto } from '@/dtos/response.dto';
+import { UpdateUserDto } from '@/dtos/update-user.dto';
 
 @Controller()
+@UseGuards(AuthGuard('jwt'))
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

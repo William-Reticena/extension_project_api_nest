@@ -10,9 +10,6 @@ export abstract class User {
   @Column({ type: 'varchar' })
   phone: string;
 
-  @Column({ type: 'varchar' })
-  password: string;
-
   @Column({ type: 'varchar', name: 'token_validation', nullable: true })
   tokenValidation: string;
 

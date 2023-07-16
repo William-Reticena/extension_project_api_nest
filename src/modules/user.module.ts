@@ -10,5 +10,6 @@ import { Email } from '@/entities/email.entity';
   imports: [TypeOrmModule.forFeature([Professor, Student, Email])],
   providers: [UserService],
   controllers: [UserController],
+  exports: [UserService],
 })
 export class UserModule {}

@@ -1,11 +1,11 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from '@/dto/create-user.dto';
+import { CreateUserDto } from '@/dtos/create-user.dto';
 import { Professor } from '@/entities/professor.entity';
 import { Student } from '@/entities/student.entity';
 import { Email } from '@/entities/email.entity';
-import { UpdateUserDto } from '@/dto/update-user.dto';
+import { UpdateUserDto } from '@/dtos/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -20,7 +20,7 @@ export class UserService {
 
   async createUser(createUserDto: CreateUserDto): Promise<Professor | Student> {
     try {
-      const { email, ra, role } = createUserDto;
+      const { email, ra, role, password } = createUserDto;
 
       if (!ra && role === 'student')
         throw new HttpException('RA not provided', HttpStatus.BAD_REQUEST, {
@@ -38,22 +38,23 @@ export class UserService {
           },
         );
 
-      let newUser: Professor | Student;
-      await this.emailRepository.manager.transaction(async (manager) => {
-        const emailEntity = this.emailRepository.create({ email });
-        const newEmail = await manager.save(emailEntity);
+      const newUser = await this.emailRepository.manager.transaction(
+        async (manager) => {
+          const emailEntity = this.emailRepository.create({ email, password });
+          const newEmail = await manager.save(emailEntity);
 
-        if (role === 'professor')
-          return await manager.getRepository(Professor).save({
-            ...createUserDto,
-            emailId: newEmail.id,
-          });
-        else
-          return await manager.getRepository(Student).save({
-            ...createUserDto,
-            emailId: newEmail.id,
-          });
-      });
+          if (role === 'professor')
+            return await manager.getRepository(Professor).save({
+              ...createUserDto,
+              emailId: newEmail.id,
+            });
+          else
+            return await manager.getRepository(Student).save({
+              ...createUserDto,
+              emailId: newEmail.id,
+            });
+        },
+      );
 
       return newUser;
     } catch (error) {
@@ -116,6 +117,14 @@ export class UserService {
         });
 
       await this.professorRepository.delete({ id: userId });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findUserByEmail(email: string): Promise<Email> {
+    try {
+      return await this.emailRepository.findOneByOrFail({ email });
     } catch (error) {
       throw error;
     }
