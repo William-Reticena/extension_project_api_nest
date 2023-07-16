@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from '@/dto/create-user.dto';
 import { Professor } from '@/entities/professor.entity';
 import { Student } from '@/entities/student.entity';
+import { Email } from '@/entities/email.entity';
 import { UpdateUserDto } from '@/dto/update-user.dto';
 
 @Injectable()
@@ -13,24 +14,46 @@ export class UserService {
     private readonly professorRepository: Repository<Professor>,
     @InjectRepository(Student)
     private readonly studentRepository: Repository<Student>,
+    @InjectRepository(Email)
+    private readonly emailRepository: Repository<Email>,
   ) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<Professor> {
+  async createUser(createUserDto: CreateUserDto): Promise<Professor | Student> {
     try {
-      const { email } = createUserDto;
-      const existingStudent = await this.studentRepository.findBy({ email });
-      const existingProfessor = await this.professorRepository.findBy({
-        email,
-      });
+      const { email, ra, role } = createUserDto;
 
-      if (existingProfessor.length || existingStudent.length)
-        throw new HttpException('User already exists', HttpStatus.BAD_REQUEST, {
-          cause: 'Email já existente',
+      if (!ra && role === 'student')
+        throw new HttpException('RA not provided', HttpStatus.BAD_REQUEST, {
+          cause: 'RA não informado',
         });
 
-      const professorEntity = this.professorRepository.create(createUserDto);
+      const existingUser = await this.emailRepository.findOneBy({ email });
 
-      const newUser = await this.professorRepository.save(professorEntity);
+      if (existingUser)
+        throw new HttpException(
+          'Email already in use',
+          HttpStatus.BAD_REQUEST,
+          {
+            cause: 'Email já está em uso',
+          },
+        );
+
+      let newUser: Professor | Student;
+      await this.emailRepository.manager.transaction(async (manager) => {
+        const emailEntity = this.emailRepository.create({ email });
+        const newEmail = await manager.save(emailEntity);
+
+        if (role === 'professor')
+          return await manager.getRepository(Professor).save({
+            ...createUserDto,
+            emailId: newEmail.id,
+          });
+        else
+          return await manager.getRepository(Student).save({
+            ...createUserDto,
+            emailId: newEmail.id,
+          });
+      });
 
       return newUser;
     } catch (error) {

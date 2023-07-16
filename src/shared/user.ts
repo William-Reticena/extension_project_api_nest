@@ -7,9 +7,6 @@ export abstract class User {
   @Column({ type: 'varchar', name: 'last_name' })
   lastName: string;
 
-  @Column({ type: 'varchar', unique: true })
-  email: string;
-
   @Column({ type: 'varchar' })
   phone: string;
 

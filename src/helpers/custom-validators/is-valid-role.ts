@@ -9,7 +9,7 @@ import { CreateUserDto } from '../../dto/create-user.dto';
 @ValidatorConstraint({ name: 'isValidRole', async: false })
 export class IsValidRoleConstraint {
   validate(role: string) {
-    const validRoles = ['Professor', 'Aluno'];
+    const validRoles = ['professor', 'student'];
     return validRoles.includes(role);
   }
 

@@ -1,11 +1,22 @@
-import { Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from '@/shared/user';
-import { Project } from './project.entity';
+import { Email } from '@/entities/email.entity';
+import { Project } from '@/entities/project.entity';
 
 @Entity()
 export class Professor extends User {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @OneToOne(() => Email, () => Professor, { cascade: true, eager: true })
+  @JoinColumn({ name: 'email_id' })
+  emailId: number;
 
   @OneToMany(() => Project, () => Professor)
   projects: Project[];

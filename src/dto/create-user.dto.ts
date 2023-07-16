@@ -1,13 +1,19 @@
 import {
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Matches,
   MinLength,
 } from 'class-validator';
 import { passwordRegex } from '@/helpers/regexes/password';
+import { IsValidRole } from '../helpers/custom-validators/is-valid-role';
 
 export class CreateUserDto {
+  @IsString({ message: 'RA must be a string' })
+  @IsOptional()
+  readonly ra?: string;
+
   @IsString({ message: 'Name must be a string' })
   @IsNotEmpty({ message: 'Name is required' })
   @MinLength(3, { message: 'Name must be at least 3 characters' })
@@ -34,4 +40,9 @@ export class CreateUserDto {
       'Password must be at least 8 characters, one uppercase letter, one lowercase letter and one number',
   })
   readonly password: string;
+
+  @IsString({ message: 'Role must be a string' })
+  @IsNotEmpty({ message: 'Role is required' })
+  @IsValidRole({ message: 'Role must be Professor or Aluno' })
+  readonly role: string;
 }

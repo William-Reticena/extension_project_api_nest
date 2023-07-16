@@ -20,11 +20,14 @@ export class CustomExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
+    console.log(error);
+
     if (error.name !== 'QueryFailedError') {
       response.status(error.status).json({
-        developerMessage: error.response
-          ? { ...error.response }
-          : error.message,
+        developerMessage:
+          error.response && error.response.message
+            ? { ...error.response }
+            : error.message,
         userMessage: error?.cause,
         status: error.status,
       });
