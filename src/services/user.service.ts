@@ -129,4 +129,12 @@ export class UserService {
       throw error;
     }
   }
+
+  async findUserByEmailId(emailId: number): Promise<Email> {
+    try {
+      return await this.emailRepository.findOneByOrFail({ id: emailId });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
