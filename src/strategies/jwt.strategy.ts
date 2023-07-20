@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserService } from '@/services/user.service';
 import { Professor } from '@/entities/professor.entity';
+import { Email } from '../entities/email.entity';
+import { Student } from '../entities/student.entity';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -14,11 +16,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: { sub: string; email: string }): Promise<Professor> {
+  async validate(payload: {
+    sub: string;
+    email: string;
+  }): Promise<Professor | Student> {
     const credentials = await this.userService.findUserByEmail(payload.email);
+    console.log(credentials);
 
     const user = await this.userService.findUserByEmailId(credentials.id);
 
-    return { ...user };
+    console.log(user);
+
+    return user;
   }
+
+  // criar uma outra tabela de roles
 }

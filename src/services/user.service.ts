@@ -43,16 +43,23 @@ export class UserService {
           const emailEntity = this.emailRepository.create({ email, password });
           const newEmail = await manager.save(emailEntity);
 
-          if (role === 'professor')
-            return await manager.getRepository(Professor).save({
+          if (role === 'professor') {
+            const newProfessor = manager.getRepository(Professor).create({
               ...createUserDto,
-              emailId: newEmail.id,
+              emailId: newEmail,
             });
-          else
-            return await manager.getRepository(Student).save({
+
+            return await manager.getRepository(Professor).save(newProfessor);
+          } else {
+            const newStudent = manager.getRepository(Student).create({
               ...createUserDto,
-              emailId: newEmail.id,
+              emailId: newEmail,
             });
+
+            console.log(newStudent);
+
+            return await manager.getRepository(Student).save(newStudent);
+          }
         },
       );
 
@@ -124,15 +131,34 @@ export class UserService {
 
   async findUserByEmail(email: string): Promise<Email> {
     try {
-      return await this.emailRepository.findOneByOrFail({ email });
+      const user = await this.emailRepository.findOneBy({ email });
+
+      if (!user)
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND, {
+          cause: 'Usuário não encontrado',
+        });
+
+      return user;
     } catch (error) {
       throw error;
     }
   }
 
-  async findUserByEmailId(emailId: number): Promise<Email> {
+  async findUserByEmailId(emailId: number): Promise<Professor | Student> {
+    console.log(emailId);
+
     try {
-      return await this.emailRepository.findOneByOrFail({ id: emailId });
+      const isProfessor = await this.professorRepository.findOneBy({
+        emailId: { id: emailId },
+      });
+
+      if (isProfessor) return isProfessor;
+
+      const isStudent = await this.studentRepository.findOneBy({
+        emailId: { id: emailId },
+      });
+
+      return isStudent;
     } catch (error) {
       throw error;
     }

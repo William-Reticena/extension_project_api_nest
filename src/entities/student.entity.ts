@@ -7,7 +7,7 @@ export class Student extends User {
   @PrimaryColumn({ type: 'varchar' })
   ra: string;
 
-  @OneToOne(() => Email, () => Student)
+  @OneToOne(() => Email, (student) => student.id)
   @JoinColumn({ name: 'email_id' })
-  emailId: number;
+  emailId: Email;
 }

@@ -16,7 +16,6 @@ import { ResponseDto } from '@/dtos/response.dto';
 import { UpdateUserDto } from '@/dtos/update-user.dto';
 
 @Controller()
-@UseGuards(AuthGuard('jwt'))
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -32,6 +31,7 @@ export class UserController {
   }
 
   @Get(':userId?')
+  @UseGuards(AuthGuard('jwt'))
   async getUsers(@Param('userId') userId?: number): Promise<ResponseDto> {
     if (userId) {
       const response = await this.userService.findUserById(userId);
@@ -53,6 +53,7 @@ export class UserController {
   }
 
   @Patch(':userId')
+  @UseGuards(AuthGuard('jwt'))
   async updateUser(
     @Param('userId') userId: number,
     @Body() updateUserDto: UpdateUserDto,
@@ -67,6 +68,7 @@ export class UserController {
   }
 
   @Delete(':userId')
+  @UseGuards(AuthGuard('jwt'))
   async deleteUser(@Param('userId') userId: number): Promise<ResponseDto> {
     const response = await this.userService.deleteUser(userId);
     return new ResponseDto(

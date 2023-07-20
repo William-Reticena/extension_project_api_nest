@@ -14,10 +14,10 @@ export class Professor extends User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Email, () => Professor, { cascade: true, eager: true })
+  @OneToOne(() => Email, () => Professor, { cascade: true })
   @JoinColumn({ name: 'email_id' })
-  emailId: number;
+  emailId: Email;
 
-  @OneToMany(() => Project, () => Professor)
+  @OneToMany(() => Project, (project) => project.professorId)
   projects: Project[];
 }
