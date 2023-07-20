@@ -1,7 +1,7 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import * as dotenv from 'dotenv';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm'
+import * as dotenv from 'dotenv'
 
-dotenv.config();
+dotenv.config()
 
 export const dataSource: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -12,4 +12,4 @@ export const dataSource: TypeOrmModuleOptions = {
   database: process.env.DB_DATABASE,
   entities: [__dirname + '/../entities/*.entity{.ts,.js}'],
   synchronize: true,
-};
+}

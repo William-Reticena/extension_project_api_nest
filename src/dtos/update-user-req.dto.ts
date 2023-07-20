@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { passwordRegex } from '@/helpers/regexes/password';
 
-export class UpdateUserDTO {
+export class UpdateUserReqDTO {
   @IsOptional()
   @IsString({ message: 'Name must be a string' })
   @MinLength(3, { message: 'Name must be at least 3 characters' })

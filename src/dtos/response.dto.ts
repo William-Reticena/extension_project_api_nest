@@ -1,8 +1,8 @@
 export class ResponseDTO {
-  data: any;
-  userMessage: string;
-  developerMessage: string;
-  statusCode: number;
+  data: any
+  userMessage: string
+  developerMessage: string
+  statusCode: number
 
   constructor(
     data: any,
@@ -10,9 +10,9 @@ export class ResponseDTO {
     message: string,
     statusCode: number,
   ) {
-    this.data = data;
-    this.userMessage = userMessage;
-    this.developerMessage = message;
-    this.statusCode = statusCode;
+    this.data = data
+    this.userMessage = userMessage
+    this.developerMessage = message
+    this.statusCode = statusCode
   }
 }

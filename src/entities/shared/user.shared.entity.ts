@@ -1,21 +1,21 @@
-import { Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
 export abstract class User {
   @Column({ type: 'varchar' })
-  name: string;
+  name: string
 
   @Column({ type: 'varchar', name: 'last_name' })
-  lastName: string;
+  lastName: string
 
   @Column({ type: 'varchar' })
-  phone: string;
+  phone: string
 
   @Column({ type: 'varchar', name: 'token_validation', nullable: true })
-  tokenValidation: string;
+  tokenValidation: string
 
   @CreateDateColumn({ type: 'timestamp without time zone', name: 'created_at' })
-  createdAt: Date;
+  createdAt: Date
 
   @UpdateDateColumn({ type: 'timestamp without time zone', name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt: Date
 }

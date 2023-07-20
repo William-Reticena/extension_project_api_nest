@@ -4,30 +4,30 @@ import {
   Entity,
   OneToOne,
   PrimaryGeneratedColumn,
-} from 'typeorm';
-import { hashSync } from 'bcrypt';
-import { Professor } from '@/entities/professor.entity';
-import { Student } from '@/entities/student.entity';
+} from 'typeorm'
+import { hashSync } from 'bcrypt'
+import { Professor } from '@/entities/professor.entity'
+import { Student } from '@/entities/student.entity'
 
 @Entity()
 export class Email {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column({ type: 'varchar', unique: true })
-  email: string;
+  email: string
 
   @Column({ type: 'varchar' })
-  password: string;
+  password: string
 
   @OneToOne(() => Professor, () => Email)
-  professor: Professor;
+  professor: Professor
 
   @OneToOne(() => Student, () => Email)
-  student: Student;
+  student: Student
 
   @BeforeInsert()
   hashPassword() {
-    this.password = hashSync(this.password, 10);
+    this.password = hashSync(this.password, 10)
   }
 }

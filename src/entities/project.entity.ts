@@ -4,39 +4,39 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Professor } from './professor.entity';
+} from 'typeorm'
+import { Professor } from './professor.entity'
 
 @Entity()
 export class Project {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column({ type: 'varchar' })
-  name: string;
+  name: string
 
   @Column({ type: 'varchar' })
-  description: string;
+  description: string
 
   @Column({ type: 'date', name: 'start_date' })
-  startDate: Date;
+  startDate: Date
 
   @Column({ type: 'date', name: 'end_date' })
-  endDate: Date;
+  endDate: Date
 
   @Column({ type: 'varchar' })
-  status: string;
+  status: string
 
   @Column({ type: 'int2' })
-  workload: number;
+  workload: number
 
   @Column({ type: 'int2', name: 'quantity_vacancies' })
-  quantityVacancies: number;
+  quantityVacancies: number
 
   @Column({ type: 'int2', name: 'quantity_vacancies_used' })
-  quantityVacanciesUsed: number;
+  quantityVacanciesUsed: number
 
   @ManyToOne(() => Professor, () => Project)
   @JoinColumn({ name: 'professor_id' })
-  professorId: Professor;
+  professorId: Professor
 }
