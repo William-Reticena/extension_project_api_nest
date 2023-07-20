@@ -1,19 +1,14 @@
 import {
   IsEmail,
   IsNotEmpty,
-  IsOptional,
   IsString,
   Matches,
   MinLength,
 } from 'class-validator';
 import { passwordRegex } from '@/helpers/regexes/password';
-import { IsValidRole } from '../helpers/custom-validators/is-valid-role';
+import { IsValidRole } from '@/helpers/custom-validators/is-valid-role';
 
-export class CreateUserDto {
-  @IsString({ message: 'RA must be a string' })
-  @IsOptional()
-  readonly ra?: string;
-
+export class CreateUserDTO {
   @IsString({ message: 'Name must be a string' })
   @IsNotEmpty({ message: 'Name is required' })
   @MinLength(3, { message: 'Name must be at least 3 characters' })

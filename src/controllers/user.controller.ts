@@ -11,18 +11,18 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from '@/services/user.service';
-import { CreateUserDto } from '@/dtos/create-user.dto';
-import { ResponseDto } from '@/dtos/response.dto';
-import { UpdateUserDto } from '@/dtos/update-user.dto';
+import { CreateUserDTO } from '@/dtos/create-user.dto';
+import { ResponseDTO } from '@/dtos/response.dto';
+import { UpdateUserDTO } from '@/dtos/update-user.dto';
 
 @Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<ResponseDto> {
+  async createUser(@Body() createUserDto: CreateUserDTO): Promise<ResponseDTO> {
     const response = await this.userService.createUser(createUserDto);
-    return new ResponseDto(
+    return new ResponseDTO(
       response,
       'Usuário criado com sucesso',
       'User created successfully',
@@ -32,10 +32,10 @@ export class UserController {
 
   @Get(':userId?')
   @UseGuards(AuthGuard('jwt'))
-  async getUsers(@Param('userId') userId?: number): Promise<ResponseDto> {
+  async getUsers(@Param('userId') userId?: number): Promise<ResponseDTO> {
     if (userId) {
       const response = await this.userService.findUserById(userId);
-      return new ResponseDto(
+      return new ResponseDTO(
         response,
         'Usuário encontrado com sucesso',
         'User found successfully',
@@ -43,7 +43,7 @@ export class UserController {
       );
     } else {
       const response = await this.userService.findAllUsers();
-      return new ResponseDto(
+      return new ResponseDTO(
         response,
         'Usuários listados com sucesso',
         'Users listed successfully',
@@ -56,10 +56,10 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'))
   async updateUser(
     @Param('userId') userId: number,
-    @Body() updateUserDto: UpdateUserDto,
-  ): Promise<ResponseDto> {
+    @Body() updateUserDto: UpdateUserDTO,
+  ): Promise<ResponseDTO> {
     const response = await this.userService.updateUser(userId, updateUserDto);
-    return new ResponseDto(
+    return new ResponseDTO(
       response,
       'Usuário atualizado com sucesso',
       'User updated successfully',
@@ -69,9 +69,9 @@ export class UserController {
 
   @Delete(':userId')
   @UseGuards(AuthGuard('jwt'))
-  async deleteUser(@Param('userId') userId: number): Promise<ResponseDto> {
+  async deleteUser(@Param('userId') userId: number): Promise<ResponseDTO> {
     const response = await this.userService.deleteUser(userId);
-    return new ResponseDto(
+    return new ResponseDTO(
       response,
       'Usuário deletado com sucesso',
       'User deleted successfully',

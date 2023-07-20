@@ -5,7 +5,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '@/shared/user';
+import { User } from '@/entities/shared/user.shared.entity';
 import { Email } from '@/entities/email.entity';
 import { Project } from '@/entities/project.entity';
 

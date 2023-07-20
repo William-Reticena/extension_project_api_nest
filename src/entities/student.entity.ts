@@ -1,13 +1,13 @@
 import { Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
-import { User } from '@/shared/user';
+import { User } from '@/entities/shared/user.shared.entity';
 import { Email } from '@/entities/email.entity';
 
 @Entity()
 export class Student extends User {
-  @PrimaryColumn({ type: 'varchar' })
+  @PrimaryColumn({ type: 'varchar', unique: true })
   ra: string;
 
-  @OneToOne(() => Email, (student) => student.id)
+  @OneToOne(() => Email, () => Student, { cascade: true })
   @JoinColumn({ name: 'email_id' })
   emailId: Email;
 }

@@ -1,11 +1,12 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from '@/dtos/create-user.dto';
+import { CreateUserDTO } from '@/dtos/create-user.dto';
 import { Professor } from '@/entities/professor.entity';
 import { Student } from '@/entities/student.entity';
 import { Email } from '@/entities/email.entity';
-import { UpdateUserDto } from '@/dtos/update-user.dto';
+import { UpdateUserDTO } from '@/dtos/update-user.dto';
+import { generateRA } from '../helpers/utils/ra-generator';
 
 @Injectable()
 export class UserService {
@@ -18,14 +19,9 @@ export class UserService {
     private readonly emailRepository: Repository<Email>,
   ) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<Professor | Student> {
+  async createUser(createUserDTO: CreateUserDTO): Promise<Professor | Student> {
     try {
-      const { email, ra, role, password } = createUserDto;
-
-      if (!ra && role === 'student')
-        throw new HttpException('RA not provided', HttpStatus.BAD_REQUEST, {
-          cause: 'RA não informado',
-        });
+      const { email, role, password } = createUserDTO;
 
       const existingUser = await this.emailRepository.findOneBy({ email });
 
@@ -44,21 +40,32 @@ export class UserService {
           const newEmail = await manager.save(emailEntity);
 
           if (role === 'professor') {
-            const newProfessor = manager.getRepository(Professor).create({
-              ...createUserDto,
+            const professorRepository = manager.getRepository(Professor);
+
+            const newProfessor = professorRepository.create({
+              ...createUserDTO,
               emailId: newEmail,
             });
 
-            return await manager.getRepository(Professor).save(newProfessor);
+            return await professorRepository.save(newProfessor);
           } else {
-            const newStudent = manager.getRepository(Student).create({
-              ...createUserDto,
+            const studentRepository = manager.getRepository(Student);
+
+            const raArray = await studentRepository.find({
+              select: ['ra'],
+            });
+
+            const RaGenerated = generateRA(
+              raArray.map((student) => Number(student.ra)),
+            );
+
+            const newStudent = studentRepository.create({
+              ...createUserDTO,
+              ra: String(RaGenerated),
               emailId: newEmail,
             });
 
-            console.log(newStudent);
-
-            return await manager.getRepository(Student).save(newStudent);
+            return await studentRepository.save(newStudent);
           }
         },
       );
@@ -91,7 +98,7 @@ export class UserService {
 
   async updateUser(
     userId: number,
-    updateUserDto: UpdateUserDto,
+    updateUserDTO: UpdateUserDTO,
   ): Promise<Professor> {
     try {
       const user = await this.professorRepository.findOneBy({ id: userId });
@@ -103,7 +110,7 @@ export class UserService {
 
       const updatedUser = await this.professorRepository.update(
         { id: userId },
-        updateUserDto,
+        updateUserDTO,
       );
 
       console.log(updatedUser);

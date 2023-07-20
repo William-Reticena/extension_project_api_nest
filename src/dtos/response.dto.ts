@@ -1,4 +1,4 @@
-export class ResponseDto {
+export class ResponseDTO {
   data: any;
   userMessage: string;
   developerMessage: string;

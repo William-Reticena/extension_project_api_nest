@@ -1,7 +1,7 @@
 import { IsEmail, IsNotEmpty, IsString, Matches } from 'class-validator';
 import { passwordRegex } from '@/helpers/regexes/password';
 
-export class AuthUserDto {
+export class AuthUserDTO {
   @IsNotEmpty({ message: 'Email is required' })
   @IsEmail({}, { message: 'Email is invalid' })
   readonly email: string;
