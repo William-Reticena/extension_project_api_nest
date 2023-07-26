@@ -53,17 +53,17 @@ export class UserService {
           } else {
             const studentRepository = manager.getRepository(Student)
 
-            const raArray = await studentRepository.find({
+            const RAsRegistered = await studentRepository.find({
               select: ['ra'],
             })
 
-            const RaGenerated = generateRA(
-              raArray.map((student) => Number(student.ra)),
+            const RAGenerated = generateRA(
+              RAsRegistered.map((student) => Number(student.ra)),
             )
 
             const newStudent = studentRepository.create({
               ...createUserDTO,
-              ra: String(RaGenerated),
+              ra: String(RAGenerated),
               emailId: newEmail,
             })
 

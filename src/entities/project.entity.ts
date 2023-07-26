@@ -1,11 +1,14 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm'
 import { Professor } from './professor.entity'
+import { PROJECT_STATUS_ENUM } from '../helpers/enums'
 
 @Entity()
 export class Project {
@@ -24,7 +27,11 @@ export class Project {
   @Column({ type: 'date', name: 'end_date' })
   endDate: Date
 
-  @Column({ type: 'varchar' })
+  @Column({
+    type: 'enum',
+    enum: PROJECT_STATUS_ENUM,
+    default: PROJECT_STATUS_ENUM.pending,
+  })
   status: string
 
   @Column({ type: 'int2' })
@@ -33,8 +40,14 @@ export class Project {
   @Column({ type: 'int2', name: 'quantity_vacancies' })
   quantityVacancies: number
 
-  @Column({ type: 'int2', name: 'quantity_vacancies_used' })
+  @Column({ type: 'int2', name: 'quantity_vacancies_used', default: 0 })
   quantityVacanciesUsed: number
+
+  @CreateDateColumn({ type: 'timestamp without time zone', name: 'created_at' })
+  createdAt: Date
+
+  @UpdateDateColumn({ type: 'timestamp without time zone', name: 'updated_at' })
+  updatedAt: Date
 
   @ManyToOne(() => Professor, () => Project)
   @JoinColumn({ name: 'professor_id' })
