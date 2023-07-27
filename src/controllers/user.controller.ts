@@ -11,20 +11,16 @@ import {
 } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import { UserService } from '@/services/user.service'
-import { CreateUserReqDTO } from '@/dtos/create-user-req.dto'
-import { CreateUserResDTO } from '@/dtos/create-user-res.dto'
-import { UpdateUserReqDTO } from '@/dtos/update-user-req.dto'
-import { ResponseDTO } from '@/dtos/response.dto'
+import { CreateUserDTO, UpdateUserDTO } from '@/dtos/request'
+import { CreateUserResDTO, ResponseDTO } from '@/dtos/response'
 
 @Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  async createUser(
-    @Body() createUserReqDTO: CreateUserReqDTO,
-  ): Promise<ResponseDTO> {
-    const response = await this.userService.createUser(createUserReqDTO)
+  async createUser(@Body() createUserDTO: CreateUserDTO): Promise<ResponseDTO> {
+    const response = await this.userService.createUser(createUserDTO)
     return new ResponseDTO(
       new CreateUserResDTO(response),
       'Usuário criado com sucesso',
@@ -59,9 +55,9 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'))
   async updateUser(
     @Param('userId') userId: number,
-    @Body() updateUserReqDto: UpdateUserReqDTO,
+    @Body() updateUserDto: UpdateUserDTO,
   ): Promise<ResponseDTO> {
-    const response = await this.userService.updateUser(userId, updateUserReqDto)
+    const response = await this.userService.updateUser(userId, updateUserDto)
     return new ResponseDTO(
       response,
       'Usuário atualizado com sucesso',

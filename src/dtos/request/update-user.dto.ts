@@ -1,43 +1,37 @@
 import {
   IsEmail,
-  IsNotEmpty,
+  IsOptional,
   IsString,
   Matches,
   MinLength,
 } from 'class-validator'
 import { passwordRegex } from '@/helpers/regexes/password'
-import { IsValidRole } from '@/helpers/custom-validators/is-valid-role'
 
-export class CreateUserReqDTO {
+export class UpdateUserDTO {
+  @IsOptional()
   @IsString({ message: 'Name must be a string' })
-  @IsNotEmpty({ message: 'Name is required' })
   @MinLength(3, { message: 'Name must be at least 3 characters' })
-  readonly name: string
+  readonly name?: string
 
+  @IsOptional()
   @IsString({ message: 'Last name must be a string' })
-  @IsNotEmpty({ message: 'Last name is required' })
   @MinLength(3, { message: 'Last name must be at least 3 characters' })
-  readonly lastName: string
+  readonly lastName?: string
 
-  @IsNotEmpty({ message: 'Email is required' })
+  @IsOptional()
   @IsEmail({}, { message: 'Email is invalid' })
-  readonly email: string
+  readonly email?: string
 
+  @IsOptional()
   @IsString({ message: 'Phone must be a string' })
-  @IsNotEmpty({ message: 'Phone is required' })
   @MinLength(11, { message: 'Phone must be at least 11 characters' })
-  readonly phone: string
+  readonly phone?: string
 
+  @IsOptional()
   @IsString({ message: 'Password must be a string' })
-  @IsNotEmpty({ message: 'Password is required' })
   @Matches(passwordRegex, {
     message:
       'Password must be at least 8 characters, one uppercase letter, one lowercase letter and one number',
   })
-  readonly password: string
-
-  @IsString({ message: 'Role must be a string' })
-  @IsNotEmpty({ message: 'Role is required' })
-  @IsValidRole({ message: 'Role must be Professor or Aluno' })
-  readonly role: string
+  readonly password?: string
 }

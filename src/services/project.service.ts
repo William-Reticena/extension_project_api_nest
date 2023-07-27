@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
-import { CreateProjectReqDTO } from '@/dtos/create-project-req.dto'
+import { CreateProjectDTO } from '@/dtos/request'
 import { getWeekOffsetFromNow } from '@/helpers/utils/get-week-offset-from-now'
 import { Project } from '@/entities/project.entity'
 
@@ -12,9 +12,9 @@ export class ProjectService {
     private readonly projectRepository: Repository<Project>,
   ) {}
 
-  async createProject(createProjectReqDTO: CreateProjectReqDTO) {
+  async createProject(createProjectDTO: CreateProjectDTO) {
     try {
-      const { startDate, endDate } = createProjectReqDTO
+      const { startDate, endDate } = createProjectDTO
 
       if (new Date(startDate) < getWeekOffsetFromNow())
         throw new HttpException(
@@ -37,8 +37,8 @@ export class ProjectService {
         )
 
       const newProjectEntity = this.projectRepository.create({
-        ...createProjectReqDTO,
-        professorId: { id: createProjectReqDTO.professorId },
+        ...createProjectDTO,
+        professorId: { id: createProjectDTO.professorId },
       })
 
       return await this.projectRepository.save(newProjectEntity)

@@ -1,12 +1,11 @@
 import { InjectRepository } from '@nestjs/typeorm'
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { Repository } from 'typeorm'
-import { CreateUserReqDTO } from '@/dtos/create-user-req.dto'
 import { Professor } from '@/entities/professor.entity'
 import { Student } from '@/entities/student.entity'
 import { Email } from '@/entities/email.entity'
-import { UpdateUserReqDTO } from '@/dtos/update-user-req.dto'
-import { generateRA } from '../helpers/utils/ra-generator'
+import { CreateUserDTO, UpdateUserDTO } from '@/dtos/request'
+import { generateRA } from '@/helpers/utils/ra-generator'
 
 @Injectable()
 export class UserService {
@@ -19,9 +18,7 @@ export class UserService {
     private readonly emailRepository: Repository<Email>,
   ) {}
 
-  async createUser(
-    createUserDTO: CreateUserReqDTO,
-  ): Promise<Professor | Student> {
+  async createUser(createUserDTO: CreateUserDTO): Promise<Professor | Student> {
     try {
       const { email, role, password } = createUserDTO
 
@@ -100,7 +97,7 @@ export class UserService {
 
   async updateUser(
     userId: number,
-    updateUserDTO: UpdateUserReqDTO,
+    updateUserDTO: UpdateUserDTO,
   ): Promise<Professor> {
     try {
       const user = await this.professorRepository.findOneBy({ id: userId })

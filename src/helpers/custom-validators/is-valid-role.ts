@@ -4,7 +4,7 @@ import {
   ValidatorConstraint,
   registerDecorator,
 } from 'class-validator'
-import { CreateUserReqDTO } from '@/dtos/create-user-req.dto'
+import { CreateUserDTO } from '@/dtos/request/create-user.dto'
 
 @ValidatorConstraint({ name: 'isValidRole', async: false })
 export class IsValidRoleConstraint {
@@ -19,7 +19,7 @@ export class IsValidRoleConstraint {
 }
 
 export function IsValidRole(validationOptions?: ValidationOptions) {
-  return function (object: CreateUserReqDTO, propertyName: string) {
+  return function (object: CreateUserDTO, propertyName: string) {
     registerDecorator({
       name: 'isValidRole',
       target: object.constructor,

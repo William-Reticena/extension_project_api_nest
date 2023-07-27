@@ -1,10 +1,10 @@
-import { IsEmail, IsNotEmpty, IsString, Matches } from 'class-validator';
-import { passwordRegex } from '@/helpers/regexes/password';
+import { IsEmail, IsNotEmpty, IsString, Matches } from 'class-validator'
+import { passwordRegex } from '@/helpers/regexes/password'
 
-export class AuthUserReqDTO {
+export class AuthUserDTO {
   @IsNotEmpty({ message: 'Email is required' })
   @IsEmail({}, { message: 'Email is invalid' })
-  readonly email: string;
+  readonly email: string
 
   @IsString({ message: 'Password must be a string' })
   @IsNotEmpty({ message: 'Password is required' })
@@ -12,5 +12,5 @@ export class AuthUserReqDTO {
     message:
       'Password must be at least 8 characters, one uppercase letter, one lowercase letter and one number',
   })
-  readonly password: string;
+  readonly password: string
 }

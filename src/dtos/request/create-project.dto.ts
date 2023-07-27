@@ -8,7 +8,7 @@ import {
   MinLength,
 } from 'class-validator'
 
-export class CreateProjectReqDTO {
+export class CreateProjectDTO {
   @IsNumber({}, { message: 'Professor id must be a number' })
   @IsPositive({ message: 'Professor id must be a positive number' })
   @IsNotEmpty({ message: 'Professor id is required' })

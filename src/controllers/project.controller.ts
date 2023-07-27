@@ -9,9 +9,9 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
-import { CreateProjectReqDTO } from '@/dtos/create-project-req.dto'
+import { CreateProjectDTO } from '@/dtos/request'
+import { ResponseDTO } from '@/dtos/response'
 import { ProjectService } from '@/services/project.service'
-import { ResponseDTO } from '@/dtos/response.dto'
 
 @Controller('project')
 @UseGuards(AuthGuard('jwt'))
@@ -21,11 +21,9 @@ export class ProjectController {
   @Post()
   async createProject(
     @Req() req: any,
-    @Body() createProjectReqDTO: CreateProjectReqDTO,
+    @Body() createProjectDTO: CreateProjectDTO,
   ): Promise<ResponseDTO> {
-    const response = await this.projectService.createProject(
-      createProjectReqDTO,
-    )
+    const response = await this.projectService.createProject(createProjectDTO)
 
     return new ResponseDTO(
       response,
@@ -35,9 +33,10 @@ export class ProjectController {
     )
   }
 
-  @Get()
-  async getProjects() {
-    // console.log(professorId)
+  @Get('all')
+  async getProjects(@Query('professorId') professorId: string) {
+    console.log(professorId)
+    console.log('ok')
 
     // return await this.projectService.getProjects(professorId)
     return 'ok'

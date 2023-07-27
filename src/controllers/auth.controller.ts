@@ -1,7 +1,7 @@
 import { AuthService } from '@/services/auth.service'
 import { Body, Controller, Post, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
-import { AuthUserReqDTO } from '@/dtos/auth-user-req.dto'
+import { AuthUserDTO } from '@/dtos/request'
 
 @Controller()
 export class AuthController {
@@ -9,7 +9,7 @@ export class AuthController {
 
   @UseGuards(AuthGuard('local'))
   @Post('login')
-  async login(@Body() authUserDto: AuthUserReqDTO) {
+  async login(@Body() authUserDto: AuthUserDTO) {
     return await this.authService.login(authUserDto)
   }
 }
