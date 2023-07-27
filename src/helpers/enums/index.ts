@@ -1,11 +1,11 @@
-export enum RA_RANGE_ENUM {
-  min = 2000000,
-  max = 3000000,
+export enum RaRangeEnum {
+  MIN = 2000000,
+  MAX = 3000000,
 }
 
-export enum PROJECT_STATUS_ENUM {
-  inProgress = 'Em andamento',
-  completed = 'Concluído',
-  pending = 'Pendente',
-  canceled = 'Cancelado',
+export enum ProjectStatusEnum {
+  IN_PROGRESS = 'Em andamento',
+  COMPLETED = 'Concluído',
+  PENDING = 'Pendente',
+  CANCELED = 'Cancelado',
 }

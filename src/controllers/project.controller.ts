@@ -3,13 +3,14 @@ import {
   Controller,
   Get,
   HttpStatus,
+  Patch,
   Post,
   Query,
   Req,
   UseGuards,
 } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
-import { CreateProjectDTO } from '@/dtos/request'
+import { CreateProjectDTO, UpdateProjectStatusDTO } from '@/dtos/request'
 import { ResponseDTO } from '@/dtos/response'
 import { ProjectService } from '@/services/project.service'
 
@@ -34,11 +35,24 @@ export class ProjectController {
   }
 
   @Get('all')
-  async getProjects(@Query('professorId') professorId: string) {
-    console.log(professorId)
-    console.log('ok')
-
-    // return await this.projectService.getProjects(professorId)
+  async getProjects(
+    @Req() req: any,
+    @Query('professorId') professorId: string,
+  ) {
     return 'ok'
+  }
+
+  @Patch('update-status')
+  async updateStatus(@Body() updateProjectStatusDTO: UpdateProjectStatusDTO) {
+    const response = await this.projectService.updateStatus(
+      updateProjectStatusDTO,
+    )
+
+    return new ResponseDTO(
+      response,
+      'Status do projeto atualizado com sucesso',
+      'Project status updated successfully',
+      HttpStatus.OK,
+    )
   }
 }

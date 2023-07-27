@@ -1,8 +1,8 @@
-import { RA_RANGE_ENUM } from '@/helpers/enums'
+import { RaRangeEnum } from '@/helpers/enums'
 import { generateRandomNumber } from './random-number-generator'
 
 export const generateRA = (raArray: number[]) => {
-  const ra = generateRandomNumber(RA_RANGE_ENUM.min, RA_RANGE_ENUM.max)
+  const ra = generateRandomNumber(RaRangeEnum.MIN, RaRangeEnum.MAX)
 
   if (raArray.includes(ra)) generateRA(raArray)
 

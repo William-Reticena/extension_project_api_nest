@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 import { Professor } from './professor.entity'
-import { PROJECT_STATUS_ENUM } from '../helpers/enums'
+import { ProjectStatusEnum } from '../helpers/enums'
 
 @Entity()
 export class Project {
@@ -29,8 +29,8 @@ export class Project {
 
   @Column({
     type: 'enum',
-    enum: PROJECT_STATUS_ENUM,
-    default: PROJECT_STATUS_ENUM.pending,
+    enum: ProjectStatusEnum,
+    default: ProjectStatusEnum.PENDING,
   })
   status: string
 

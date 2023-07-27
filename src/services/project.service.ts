@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
-import { CreateProjectDTO } from '@/dtos/request'
+import { CreateProjectDTO, UpdateProjectStatusDTO } from '@/dtos/request'
 import { getWeekOffsetFromNow } from '@/helpers/utils/get-week-offset-from-now'
 import { Project } from '@/entities/project.entity'
 
@@ -42,6 +42,27 @@ export class ProjectService {
       })
 
       return await this.projectRepository.save(newProjectEntity)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async updateStatus(updateProjectStatusDTO: UpdateProjectStatusDTO) {
+    try {
+      const { projectId, status } = updateProjectStatusDTO
+
+      const projectEntity = await this.projectRepository.findOne({
+        where: { id: projectId },
+      })
+
+      if (!projectEntity)
+        throw new HttpException('Project not found', HttpStatus.NOT_FOUND, {
+          cause: 'Projeto não encontrado',
+        })
+
+      projectEntity.status = status
+
+      return await this.projectRepository.save(projectEntity)
     } catch (error) {
       throw error
     }
