@@ -6,6 +6,7 @@ import { Student } from '@/entities/student.entity'
 import { Email } from '@/entities/email.entity'
 import { CreateUserDTO, UpdateUserDTO } from '@/dtos/request'
 import { generateRA } from '@/helpers/utils/ra-generator'
+import { CreateUserResDTO } from '@/dtos/response'
 
 @Injectable()
 export class UserService {
@@ -18,7 +19,7 @@ export class UserService {
     private readonly emailRepository: Repository<Email>,
   ) {}
 
-  async createUser(createUserDTO: CreateUserDTO): Promise<Professor | Student> {
+  async createUser(createUserDTO: CreateUserDTO): Promise<CreateUserResDTO> {
     try {
       const { email, role, password } = createUserDTO
 
@@ -69,7 +70,7 @@ export class UserService {
         },
       )
 
-      return newUser
+      return new CreateUserResDTO(newUser)
     } catch (error) {
       throw error
     }

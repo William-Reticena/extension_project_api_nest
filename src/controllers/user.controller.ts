@@ -22,7 +22,7 @@ export class UserController {
   async createUser(@Body() createUserDTO: CreateUserDTO): Promise<ResponseDTO> {
     const response = await this.userService.createUser(createUserDTO)
     return new ResponseDTO(
-      new CreateUserResDTO(response),
+      response,
       'Usuário criado com sucesso',
       'User created successfully',
       HttpStatus.CREATED,
