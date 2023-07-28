@@ -18,10 +18,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: {
     sub: string
     email: string
-  }): Promise<Professor | Student> {
+  }): Promise<(Professor & { role: string }) | (Student & { role: string })> {
     const credentials = await this.userService.findUserByEmail(payload.email)
 
-    const user = await this.userService.findUserByEmailId(credentials.id)
+    const userEntity = await this.userService.findUserByEmailId(credentials.id)
+
+    let role = 'student'
+    if (userEntity instanceof Professor) {
+      role = 'professor'
+    }
+
+    const user = { ...userEntity, role }
 
     return user
   }

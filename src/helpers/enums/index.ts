@@ -9,3 +9,8 @@ export enum ProjectStatusEnum {
   PENDING = 'Pendente',
   CANCELED = 'Cancelado',
 }
+
+export enum PageEnum {
+  PAGE_DEFAULT = 1,
+  PAGE_SIZE_DEFAULT = 100,
+}
